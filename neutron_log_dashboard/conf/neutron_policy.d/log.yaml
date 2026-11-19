@@ -1,0 +1,33 @@
+# Network log rules for Horizon.
+#
+# Horizon decides whether to show the panel and its buttons with its own
+# copy of the Neutron policy. That copy can differ from the server: the
+# default file of Horizon 2025.1 has the log rules as admin only and has no
+# "create_log:output_type" rule at all (it falls back to the "default"
+# rule). This file is not loaded automatically. Point
+# POLICY_DIRS['network'] at this directory with an absolute path, for
+# example:
+#
+#   POLICY_DIRS = {'network': ['/var/lib/openstack/lib/python3.12/'
+#                              'site-packages/neutron_log_dashboard/conf/'
+#                              'neutron_policy.d']}
+#
+# or copy the rules into the policy file your deployment gives Horizon.
+#
+# This is an example, not a general Neutron default. The check strings
+# were copied from neutron/conf/policies/logging.py of the server
+# implementation this plugin was written against:
+#
+# * five rules of the network log API that Neutron already has;
+# * "create_log:output_type", which only exists in a server with the
+#   logging-output-type extension. That extension is not merged in
+#   upstream Neutron.
+#
+# If the server policy differs or is overridden, use the same strings
+# here. The server always has the final say.
+"get_loggable_resource": "rule:admin_only or (role:manager and project_id:%(project_id)s)"
+"create_log": "rule:admin_only or (role:manager and project_id:%(project_id)s)"
+"create_log:output_type": "rule:admin_only"
+"get_log": "rule:admin_only or (role:manager and project_id:%(project_id)s)"
+"update_log": "rule:admin_only or (role:manager and project_id:%(project_id)s)"
+"delete_log": "rule:admin_only or (role:manager and project_id:%(project_id)s)"

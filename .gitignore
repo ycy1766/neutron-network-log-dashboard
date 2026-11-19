@@ -1,0 +1,17 @@
+*.py[cod]
+*.swp
+*.egg*/
+.coverage
+.tox/
+.venv/
+build/
+cover/
+dist/
+doc/build/
+releasenotes/build/
+AUTHORS
+ChangeLog
+
+# Translation catalogs
+*.mo
+*.pot

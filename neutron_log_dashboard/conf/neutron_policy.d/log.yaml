@@ -2,15 +2,15 @@
 #
 # Horizon decides whether to show the panel and its buttons with its own
 # copy of the Neutron policy. That copy can differ from the server: the
-# default file of Horizon 2025.1 has the log rules as admin only and has no
-# "create_log:output_type" rule at all (it falls back to the "default"
-# rule). This file is not loaded automatically. Point
-# POLICY_DIRS['network'] at this directory with an absolute path, for
-# example:
+# default file of Horizon 2025.1 has the log rules as admin only, and no
+# Horizon release has the "create_log:output_type" rule (it falls back to
+# the "default" rule). This file is not loaded automatically. Add this directory, with
+# its absolute path, to the list of the "network" service in POLICY_DIRS.
+# Add to the list; do not replace the setting:
 #
-#   POLICY_DIRS = {'network': ['/var/lib/openstack/lib/python3.12/'
-#                              'site-packages/neutron_log_dashboard/conf/'
-#                              'neutron_policy.d']}
+#   POLICY_DIRS.setdefault('network', []).append(
+#       '/usr/lib/python3/dist-packages/neutron_log_dashboard/conf/'
+#       'neutron_policy.d')
 #
 # or copy the rules into the policy file your deployment gives Horizon.
 #

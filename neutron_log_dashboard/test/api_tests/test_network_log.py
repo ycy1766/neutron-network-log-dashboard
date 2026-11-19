@@ -416,6 +416,12 @@ class NeutronclientPathTests(_ClientPathTests, test.APITestCase):
     bad_request = neutron_exc.BadRequest
     forbidden = neutron_exc.Forbidden
 
+    def setUp(self):
+        if not hasattr(api.neutron, 'neutronclient'):
+            self.skipTest("This Horizon release does not build "
+                          "python-neutronclient.")
+        super().setUp()
+
     def test_not_found_is_classified_by_horizon(self):
         self.requests.get(self.url + '/log/logs/x', status_code=404,
                           json=self._error('LogResourceNotFound', 'gone'))

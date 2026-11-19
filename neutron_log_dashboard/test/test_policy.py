@@ -153,19 +153,39 @@ class PolicyMergeTests(_PolicyTestCase):
 
     @override_settings(POLICY_DIRS={})
     def test_without_the_example_rules(self):
-        """Why a deployment has to wire the rules.
+        """What Horizon decides when a deployment does not wire the rules.
 
-        The log rules of Horizon are admin only, so a manager gets no
-        panel. ``create_log:output_type`` is unknown to Horizon and falls
-        back to its default rule, which a member of the project passes.
+        ``create_log:output_type`` is unknown to Horizon and falls back to
+        its default rule, which a member of the project passes. That is
+        why the panel never asks for this rule alone.
+
+        The five existing rules follow the Horizon release: administrator
+        only in 2025.1, open to the project manager in later releases.
+        Where they are open, a manager is shown the create button without
+        the example rules, and the server refuses the request.
         """
         policy_backend.reset()
+        member = self._check(['member', 'reader'])
         manager = self._check(['manager', 'member', 'reader'])
+        create = (('network', 'create_log'),
+                  ('network', 'create_log:output_type'))
+
+        self.assertTrue(member['create_log:output_type'])
+        self.assertTrue(manager['create_log:output_type'])
+        # A member is refused by the existing rules in every release.
+        self.assertEqual(dict(NOTHING, **{'create_log:output_type': True}),
+                         member)
+        self._login(['member', 'reader'])
+        self.assertFalse(policy.check(create, self.request))
+
+        manager_default = manager['get_log']
         self.assertEqual(
-            dict(NOTHING, **{'create_log:output_type': True}), manager)
-        self.assertEqual(
-            dict(NOTHING, **{'create_log:output_type': True}),
-            self._check(['member', 'reader']))
+            dict(dict.fromkeys(RULES, manager_default),
+                 **{'create_log:output_type': True}),
+            manager)
+        self._login(['manager', 'member', 'reader'])
+        self.assertEqual(manager_default,
+                         policy.check(create, self.request))
 
     def test_taas_rules_are_kept(self):
         taas_dir = os.path.dirname(

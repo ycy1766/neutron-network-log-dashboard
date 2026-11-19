@@ -1,0 +1,73 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# These are unit tests with a mocked Neutron. They do not run against a
+# Neutron server with the logging-output-type extension.
+jobs:
+  test:
+    name: ${{ matrix.name }}
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # The environment the plugin was developed and checked in.
+          # Horizon builds both clients, so both client paths run.
+          - name: Horizon 25.3.2 (2025.1)
+            python: "3.12"
+            constraints: https://opendev.org/openstack/requirements/raw/tag/2025.1-eom/upper-constraints.txt
+            horizon: "25.3.2"
+          # Compatibility with a later Horizon, which only builds the
+          # openstacksdk client. The python-neutronclient tests are skipped.
+          - name: Horizon 27.0.0 (openstacksdk only)
+            python: "3.12"
+            constraints: https://opendev.org/openstack/requirements/raw/branch/master/upper-constraints.txt
+            horizon: "27.0.0"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Install Horizon ${{ matrix.horizon }}
+        run: |
+          python -m pip install --upgrade pip wheel 'setuptools<80'
+          curl -fsSL -o /tmp/uc.txt "${{ matrix.constraints }}"
+          # XStatic packages of Horizon need pkg_resources at build time,
+          # which setuptools>=80 no longer ships.
+          pip install --no-build-isolation -c /tmp/uc.txt "horizon==${{ matrix.horizon }}" \
+            -r requirements.txt -r test-requirements.txt
+          pip install --no-deps -e .
+      - name: flake8
+        run: flake8 .
+      - name: Translation catalog check
+        run: python manage.py extract_messages --module neutron_log_dashboard --verbosity 0 --check-only
+      - name: Unit tests
+        run: python manage.py test neutron_log_dashboard --settings=neutron_log_dashboard.test.settings
+      - name: Package contents
+        run: |
+          pip wheel --no-build-isolation --no-deps -w /tmp/wheel .
+          unzip -l /tmp/wheel/*.whl | tee /tmp/wheel.txt
+          grep -q 'conf/neutron_policy.d/log.yaml' /tmp/wheel.txt
+          grep -q 'templates/flow_logs/_detail_overview.html' /tmp/wheel.txt
+          grep -q 'enabled/_7210_project_flow_logs_panel.py' /tmp/wheel.txt
+  docs:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # reno reads the git history
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install doc requirements
+        run: |
+          curl -fsSL -o /tmp/uc.txt https://opendev.org/openstack/requirements/raw/branch/master/upper-constraints.txt
+          pip install -c /tmp/uc.txt -r doc/requirements.txt
+      - name: Build docs
+        run: sphinx-build -W -b html doc/source doc/build/html
+      - name: Build release notes
+        run: sphinx-build -a -E -W -d releasenotes/build/doctrees -b html releasenotes/source releasenotes/build/html

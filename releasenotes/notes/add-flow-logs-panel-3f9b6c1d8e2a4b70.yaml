@@ -1,0 +1,27 @@
+---
+prelude: >
+    First version of the Neutron Log Dashboard, a horizon plugin for Neutron
+    network logs with the ``flow_sample`` output (flow logs). It needs a
+    Neutron server with the ``logging-output-type`` API extension, which is
+    not part of upstream Neutron.
+features:
+  - |
+    Add the **Project > Network > Flow Logs** panel to list, create, show,
+    enable, disable and delete the flow logs of the current project. The
+    panel is shown when Neutron advertises the ``logging-output-type``
+    extension.
+  - |
+    Include an optional policy example for horizon in
+    ``neutron_log_dashboard/conf/neutron_policy.d/log.yaml``. It is not
+    loaded automatically; add the directory to the ``network`` list of
+    ``POLICY_DIRS`` to use it.
+issues:
+  - |
+    Packet logs are not managed. Only the packet logs of the current
+    project are read to warn about one that is applied to the security
+    group of a flow log; a packet log of another project that covers every
+    security group is not seen.
+  - |
+    Horizon does not know the ``create_log:output_type`` rule and falls
+    back to its ``default`` rule for it. The panel always checks it
+    together with ``create_log`` or ``update_log``.

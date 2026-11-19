@@ -37,7 +37,9 @@ Status
   through its session). Both paths pass the same tests.
 * Panel (Project > Network > Flow Logs): list, create, detail, enable,
   disable, delete.
-* Policy tests with the real policy engine, documentation, CI: not done.
+* Policy tests with the real Horizon policy engine and a mocked Neutron
+  API: done. The server policy and real tokens are not exercised.
+* Documentation, CI, browser checks: not done.
 
 Testing
 -------
@@ -63,3 +65,14 @@ Policy
 policy example for Horizon: the five network log rules Neutron already has
 and ``create_log:output_type`` of the extension. It is not loaded
 automatically; see the comment in the file.
+
+With the rules a project manager gets the panel and can disable and delete
+flow logs; creating and enabling stays with the administrator. Without
+them Horizon uses its own defaults, which are administrator only for the
+five existing rules, so only an administrator gets the panel.
+
+Use an absolute path in ``POLICY_DIRS``. A relative one is joined to
+``POLICY_FILES_PATH``, which a deployment usually points at its
+configuration directory. Rules read from a policy directory replace rules
+of the same name from the policy file and from the defaults; rules of other
+plugins in other directories are kept.

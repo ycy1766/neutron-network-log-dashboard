@@ -23,9 +23,9 @@ Horizon up to 2025.1 builds a ``python-neutronclient`` client
 Later releases only have the openstacksdk based ``api.neutron.networkclient``.
 openstacksdk has no network log resource, so that path sends the requests
 through the proxy session. Both paths return the same wrappers and page
-through lists the same way. Their
-exceptions differ by class; use ``error_message`` and ``is_not_found`` to
-read them.
+through lists the same way. Their exceptions differ by class
+(python-neutronclient exceptions, ``NetworkLogError``); use
+``error_message`` and ``is_not_found`` to read them.
 """
 
 import logging
@@ -115,10 +115,42 @@ def _use_neutronclient():
     return hasattr(neutron, 'neutronclient')
 
 
+class NetworkLogError(Exception):
+    """An error response of Neutron on the openstacksdk path.
+
+    Horizon 27.0.0 classifies openstacksdk ``HttpException`` as
+    unauthorized, also a 400 of a validation or a 409. Passing one to
+    ``horizon.exceptions.handle`` shows "Unauthorized" and a 403 page
+    instead of the message of the server. Only a 401 is left as it is;
+    every other error response is raised as this class, with the status
+    and the message of the server. Horizon handles it as an ordinary error
+    when the view gives a message.
+    """
+
+    def __init__(self, message, status_code):
+        super().__init__(message)
+        self.message = message
+        self.status_code = status_code
+
+
+def _sdk_error_message(exc):
+    # ``details`` is the raw body when openstacksdk could not read it.
+    try:
+        return exc.response.json()['NeutronError']['message']
+    except Exception:
+        return exc.details or str(exc)
+
+
 def _sdk_request(request, method, path, **kwargs):
     proxy = neutron.networkclient(request)
     response = getattr(proxy, method)(path, **kwargs)
-    sdk_exceptions.raise_from_response(response)
+    try:
+        sdk_exceptions.raise_from_response(response)
+    except sdk_exceptions.HttpException as exc:
+        if exc.status_code == 401:
+            raise
+        raise NetworkLogError(_sdk_error_message(exc),
+                              exc.status_code) from exc
     return response
 
 
@@ -208,16 +240,11 @@ def _log_delete(request, log_id):
 def error_message(exc):
     """The message the server sent with an error, or ``str(exc)``.
 
-    python-neutronclient keeps it in ``message``, openstacksdk in
-    ``details``. The text comes from the server: show it as plain text and
-    never mark it safe for HTML.
+    The text comes from the server: show it as plain text and never mark
+    it safe for HTML.
     """
     if isinstance(exc, sdk_exceptions.HttpException):
-        # ``details`` is the raw body when openstacksdk could not read it.
-        try:
-            return exc.response.json()['NeutronError']['message']
-        except Exception:
-            return exc.details or str(exc)
+        return _sdk_error_message(exc)
     return getattr(exc, 'message', None) or str(exc)
 
 

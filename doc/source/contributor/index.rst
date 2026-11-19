@@ -29,6 +29,11 @@ Project layout
     openstacksdk has no network log resource, so that path sends the
     requests through the proxy session.
 
+    Errors of the openstacksdk path are raised as ``NetworkLogError``,
+    except a 401. Horizon 27.0.0 classifies openstacksdk ``HttpException``
+    as unauthorized and would show a 403 page instead of the message of
+    the server.
+
 ``neutron_log_dashboard/dashboards/project/flow_logs``
     Panel, table, form, views and templates.
 

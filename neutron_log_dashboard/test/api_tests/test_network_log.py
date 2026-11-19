@@ -66,6 +66,14 @@ class _ClientPathTests(object):
         return {'NeutronError': {'type': error_type, 'message': message,
                                  'detail': ''}}
 
+    def _assert_shown_as_an_error(self, exc):
+        # Not "unauthorized": Horizon would show a 403 page instead of
+        # the message. Either recoverable, or unknown to Horizon, which
+        # is handled as recoverable when the view gives a message.
+        self.assertNotIsInstance(exc, dashboard_exceptions.UNAUTHORIZED)
+        if self.use_neutronclient:
+            self.assertIsInstance(exc, dashboard_exceptions.RECOVERABLE)
+
     def test_flow_log_list(self):
         logs = [self._own(log) for log in self.api_flow_logs.list()]
         self.requests.get(self.url + '/log/logs', json={'logs': logs})
@@ -168,8 +176,7 @@ class _ClientPathTests(object):
         self.assertEqual(SELECTOR_ERROR,
                          network_log.error_message(raised.exception))
         self.assertFalse(network_log.is_not_found(raised.exception))
-        self.assertIsInstance(raised.exception,
-                              dashboard_exceptions.RECOVERABLE)
+        self._assert_shown_as_an_error(raised.exception)
 
     def test_flow_log_create_forbidden(self):
         self.requests.post(
@@ -186,8 +193,7 @@ class _ClientPathTests(object):
         self.assertEqual('rule:create_log:output_type is disallowed by '
                          'policy',
                          network_log.error_message(raised.exception))
-        self.assertIsInstance(raised.exception,
-                              dashboard_exceptions.RECOVERABLE)
+        self._assert_shown_as_an_error(raised.exception)
 
     def test_flow_log_enable_rejected(self):
         # The server validates again on enable; the message must survive.
@@ -433,9 +439,50 @@ class NeutronclientPathTests(_ClientPathTests, test.APITestCase):
 
 class SdkPathTests(_ClientPathTests, test.APITestCase):
     use_neutronclient = False
-    not_found = sdk_exc.NotFoundException
-    bad_request = sdk_exc.BadRequestException
-    forbidden = sdk_exc.ForbiddenException
+    not_found = network_log.NetworkLogError
+    bad_request = network_log.NetworkLogError
+    forbidden = network_log.NetworkLogError
+
+    def test_every_other_error_keeps_status_and_message(self):
+        log = self._own(self.api_flow_logs.first())
+        url = self.url + '/log/logs/' + log['id']
+        self.requests.get(url, json={'log': log})
+        for status, error_type, message in (
+                (403, 'PolicyNotAuthorized', 'not allowed'),
+                (404, 'LogResourceNotFound', 'gone'),
+                (409, 'Conflict', 'in use'),
+                (500, 'HTTPInternalServerError', 'server broke'),
+                (503, 'HTTPServiceUnavailable', 'try later')):
+            self.requests.delete(url, status_code=status,
+                                 json=self._error(error_type, message))
+
+            with self.assertRaises(network_log.NetworkLogError) as raised:
+                network_log.flow_log_delete(self.request, log['id'])
+
+            self.assertEqual(status, raised.exception.status_code)
+            self.assertEqual(message, raised.exception.message)
+            self.assertEqual(message,
+                             network_log.error_message(raised.exception))
+            self._assert_shown_as_an_error(raised.exception)
+
+    def test_error_without_a_neutron_body_keeps_the_status(self):
+        self.requests.get(self.url + '/log/logs', status_code=502,
+                          text='Bad Gateway')
+
+        with self.assertRaises(network_log.NetworkLogError) as raised:
+            network_log.flow_log_list(self.request)
+
+        self.assertEqual(502, raised.exception.status_code)
+        self.assertIn('Bad Gateway', raised.exception.message)
+
+    def test_unauthorized_is_left_to_horizon(self):
+        self.requests.get(self.url + '/log/logs', status_code=401,
+                          json=self._error('Unauthorized', 'token expired'))
+
+        with self.assertRaises(sdk_exc.HttpException) as raised:
+            network_log.flow_log_list(self.request)
+
+        self.assertEqual(401, raised.exception.status_code)
 
     def test_sdk_has_no_network_log_resource(self):
         # The reason for the session calls. If this fails, openstacksdk

@@ -10,6 +10,13 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-import pbr.version
+from django.urls import re_path
 
-version_info = pbr.version.VersionInfo('neutron_log_dashboard')
+from neutron_network_log_dashboard.dashboards.project.flow_logs import views
+
+urlpatterns = [
+    re_path(r'^$', views.IndexView.as_view(), name='index'),
+    re_path(r'^create/$', views.CreateView.as_view(), name='create'),
+    re_path(r'^(?P<flow_log_id>[^/]+)/$',
+            views.DetailView.as_view(), name='detail'),
+]

@@ -26,8 +26,8 @@ from openstack_dashboard import exceptions as dashboard_exceptions
 from openstack_dashboard.test import helpers
 import requests_mock
 
-from neutron_log_dashboard.api import network_log
-from neutron_log_dashboard.test import helpers as test
+from neutron_network_log_dashboard.api import network_log
+from neutron_network_log_dashboard.test import helpers as test
 
 SELECTOR_ERROR = ('A log with the flow_sample output must select a security '
                   'group with resource_id and must not set target_id.')

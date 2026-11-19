@@ -1,2 +1,2 @@
-# settings file for neutron-log-dashboard plugin
-enable_service neutron-log-dashboard
+# settings file for neutron-network-log-dashboard plugin
+enable_service neutron-network-log-dashboard

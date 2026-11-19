@@ -13,7 +13,7 @@
 from django.utils.translation import gettext_lazy as _
 import horizon
 
-from neutron_log_dashboard.api import network_log
+from neutron_network_log_dashboard.api import network_log
 
 
 class FlowLogs(horizon.Panel):

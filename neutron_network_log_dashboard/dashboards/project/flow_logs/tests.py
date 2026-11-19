@@ -15,8 +15,8 @@ from django.utils import safestring
 from horizon import exceptions as horizon_exceptions
 from openstack_dashboard.test import helpers
 
-from neutron_log_dashboard.api import network_log
-from neutron_log_dashboard.test import helpers as test
+from neutron_network_log_dashboard.api import network_log
+from neutron_network_log_dashboard.test import helpers as test
 
 
 INDEX_URL = reverse('horizon:project:flow_logs:index')

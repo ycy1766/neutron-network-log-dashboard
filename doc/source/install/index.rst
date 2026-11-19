@@ -33,24 +33,24 @@ Requirements
 Manual Installation
 -------------------
 
-Before installing neutron-log-dashboard,
+Before installing neutron-network-log-dashboard,
 you first need to install horizon in your environment.
 
 Fetch the source code from git and run pip install.
-Make sure to install neutron-log-dashboard into the same python environment
-where horizon is installed.
+Make sure to install neutron-network-log-dashboard into the same python
+environment where horizon is installed.
 
 .. code-block:: console
 
-   $ git clone https://github.com/ycy1766/neutron-log-dashboard
-   $ cd neutron-log-dashboard
+   $ git clone https://github.com/ycy1766/neutron-network-log-dashboard
+   $ cd neutron-network-log-dashboard
    $ sudo pip install .
 
 Enable the horizon plugin.
 
 .. code-block:: console
 
-   $ cp neutron_log_dashboard/enabled/_7210_project_flow_logs_panel.py \
+   $ cp neutron_network_log_dashboard/enabled/_7210_project_flow_logs_panel.py \
          /opt/stack/horizon/openstack_dashboard/local/enabled/_7210_project_flow_logs_panel.py
 
 .. note::
@@ -59,7 +59,7 @@ Enable the horizon plugin.
    environment or distribution used. For example, for Ubuntu, this is
    ``/usr/share/openstack-dashboard/openstack_dashboard/local/enabled``.
    The openstack-helm Horizon chart links the file when
-   ``neutron_log_dashboard`` is added to the list
+   ``neutron_network_log_dashboard`` is added to the list
    ``conf.horizon.extra_panels``. Add it to the list; the modules already
    there keep their panels.
 

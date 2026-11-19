@@ -15,7 +15,7 @@ from openstack_dashboard.test.settings import *  # noqa
 import openstack_dashboard.enabled
 from openstack_dashboard.utils import settings
 
-import neutron_log_dashboard.enabled
+import neutron_network_log_dashboard.enabled
 
 HORIZON_CONFIG.pop('dashboards', None)
 HORIZON_CONFIG.pop('default_dashboard', None)
@@ -23,7 +23,7 @@ HORIZON_CONFIG.pop('default_dashboard', None)
 settings.update_dashboards(
     [
         openstack_dashboard.enabled,
-        neutron_log_dashboard.enabled,
+        neutron_network_log_dashboard.enabled,
     ],
     HORIZON_CONFIG,
     INSTALLED_APPS
@@ -32,7 +32,7 @@ settings.update_dashboards(
 INSTALLED_APPS = list(set(INSTALLED_APPS))
 
 TEST_GLOBAL_MOCKS_ON_PANELS['flow_logs'] = {
-    'method': ('neutron_log_dashboard.dashboards.project.flow_logs.panel.'
-               'FlowLogs.can_access'),
+    'method': ('neutron_network_log_dashboard.dashboards.project.flow_logs.'
+               'panel.FlowLogs.can_access'),
     'return_value': True,
 }

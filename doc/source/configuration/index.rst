@@ -66,12 +66,12 @@ five existing log rules, and that differs by release:
   rules, to avoid that.
 
 The plugin ships an optional example,
-``neutron_log_dashboard/conf/neutron_policy.d/log.yaml``. It is not loaded
-automatically. Its check strings were copied from the server implementation
+``neutron_network_log_dashboard/conf/neutron_policy.d/log.yaml``. It is not
+loaded automatically. Its check strings were copied from the server implementation
 the plugin was written against; they are not a general Neutron default. If
 your server policy differs, use your own strings.
 
-.. literalinclude:: ../../../neutron_log_dashboard/conf/neutron_policy.d/log.yaml
+.. literalinclude:: ../../../neutron_network_log_dashboard/conf/neutron_policy.d/log.yaml
    :language: yaml
    :start-after: # here. The server always has the final say.
 
@@ -86,7 +86,7 @@ would drop the directories of Horizon and of other plugins:
 .. code-block:: python
 
    POLICY_DIRS.setdefault('network', []).append(
-       '/usr/lib/python3/dist-packages/neutron_log_dashboard/conf/'
+       '/usr/lib/python3/dist-packages/neutron_network_log_dashboard/conf/'
        'neutron_policy.d')
 
 Use the absolute path of the installed package. A relative path is joined

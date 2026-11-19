@@ -10,17 +10,6 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-from openstack_dashboard.test.test_data import utils
+import pbr.version
 
-
-def load_data(load_onto=None):
-    from neutron_log_dashboard.test.test_data import log_data
-
-    loaders = (
-        log_data.data,
-    )
-    if load_onto:
-        for data_func in loaders:
-            data_func(load_onto)
-        return load_onto
-    return utils.TestData(*loaders)
+version_info = pbr.version.VersionInfo('neutron_network_log_dashboard')

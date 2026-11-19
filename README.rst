@@ -1,6 +1,6 @@
-=====================
-neutron-log-dashboard
-=====================
+=============================
+neutron-network-log-dashboard
+=============================
 
 Horizon panel for Neutron network logs with the ``flow_sample`` output
 (flow logs). Work in progress; not released.
@@ -61,7 +61,7 @@ and role inheritance, the collection of flow records, a browser.
 Policy
 ------
 
-``neutron_log_dashboard/conf/neutron_policy.d/log.yaml`` is an optional
+``neutron_network_log_dashboard/conf/neutron_policy.d/log.yaml`` is an optional
 policy example for Horizon: the five network log rules Neutron already has
 and ``create_log:output_type`` of the extension. It is not loaded
 automatically; see the comment in the file.

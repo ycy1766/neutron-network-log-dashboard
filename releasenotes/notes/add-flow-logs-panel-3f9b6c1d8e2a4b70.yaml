@@ -1,6 +1,6 @@
 ---
 prelude: >
-    First version of the Neutron Log Dashboard, a horizon plugin for Neutron
+    First version of the Neutron Network Log Dashboard, a horizon plugin for Neutron
     network logs with the ``flow_sample`` output (flow logs). It needs a
     Neutron server with the ``logging-output-type`` API extension, which is
     not part of upstream Neutron.
@@ -12,7 +12,7 @@ features:
     extension.
   - |
     Include an optional policy example for horizon in
-    ``neutron_log_dashboard/conf/neutron_policy.d/log.yaml``. It is not
+    ``neutron_network_log_dashboard/conf/neutron_policy.d/log.yaml``. It is not
     loaded automatically; add the directory to the ``network`` list of
     ``POLICY_DIRS`` to use it.
 issues:

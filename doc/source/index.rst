@@ -11,11 +11,11 @@
       License for the specific language governing permissions and limitations
       under the License.
 
-=============================
-Neutron Log Dashboard Project
-=============================
+=====================================
+Neutron Network Log Dashboard Project
+=====================================
 
-Neutron Log Dashboard is a horizon plugin for Neutron network logs with
+Neutron Network Log Dashboard is a horizon plugin for Neutron network logs with
 the ``flow_sample`` output (flow logs).
 
 .. toctree::
@@ -25,4 +25,4 @@ the ``flow_sample`` output (flow logs).
    configuration/index
    user/index
    contributor/index
-   Release Notes <https://github.com/ycy1766/neutron-log-dashboard/tree/main/releasenotes/notes>
+   Release Notes <https://github.com/ycy1766/neutron-network-log-dashboard/tree/main/releasenotes/notes>

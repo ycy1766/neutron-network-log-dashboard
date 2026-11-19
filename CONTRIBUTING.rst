@@ -6,7 +6,7 @@ The project is maintained on GitHub and is not part of OpenStack. The
 workflow is:
 
 * Report bugs and propose changes through the GitHub repository
-  https://github.com/ycy1766/neutron-log-dashboard. Pull requests must pass
+  https://github.com/ycy1766/neutron-network-log-dashboard. Pull requests must pass
   the ``ci`` workflow (``flake8`` and the unit tests against the tested
   Horizon releases).
 * Sign your commits (``git commit -s``). The Developer Certificate of Origin

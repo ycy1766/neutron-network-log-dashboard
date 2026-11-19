@@ -18,8 +18,8 @@ from horizon import exceptions
 from horizon import forms
 from horizon import messages
 
-from neutron_log_dashboard.api import network_log
-from neutron_log_dashboard.dashboards.project.flow_logs import tables
+from neutron_network_log_dashboard.api import network_log
+from neutron_network_log_dashboard.dashboards.project.flow_logs import tables
 
 LOG = logging.getLogger(__name__)
 

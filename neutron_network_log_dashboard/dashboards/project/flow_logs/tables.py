@@ -20,7 +20,7 @@ from horizon import messages
 from horizon import tables
 from openstack_dashboard import policy
 
-from neutron_log_dashboard.api import network_log
+from neutron_network_log_dashboard.api import network_log
 
 LOG = logging.getLogger(__name__)
 

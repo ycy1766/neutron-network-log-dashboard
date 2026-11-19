@@ -22,7 +22,7 @@ for general topics on developing a dashboard plugin for horizon.
 Project layout
 --------------
 
-``neutron_log_dashboard/api/network_log.py``
+``neutron_network_log_dashboard/api/network_log.py``
     The only module that talks to Neutron. It uses
     ``openstack_dashboard.api.neutron.neutronclient`` where horizon still
     provides it and the openstacksdk ``networkclient`` otherwise.
@@ -34,13 +34,13 @@ Project layout
     as unauthorized and would show a 403 page instead of the message of
     the server.
 
-``neutron_log_dashboard/dashboards/project/flow_logs``
+``neutron_network_log_dashboard/dashboards/project/flow_logs``
     Panel, table, form, views and templates.
 
-``neutron_log_dashboard/conf/neutron_policy.d``
+``neutron_network_log_dashboard/conf/neutron_policy.d``
     Optional policy example for horizon, see :doc:`../configuration/index`.
 
-``neutron_log_dashboard/test``
+``neutron_network_log_dashboard/test``
     Unit tests. The API tests run the real clients against a mocked HTTP
     transport, on both client paths. The policy tests run the real
     ``openstack_auth`` policy engine with a mocked Neutron API.
@@ -55,10 +55,10 @@ Running the tests
    $ pip install --no-build-isolation -c uc.txt horizon \
          -r requirements.txt -r test-requirements.txt
    $ flake8
-   $ python manage.py extract_messages --module neutron_log_dashboard \
+   $ python manage.py extract_messages --module neutron_network_log_dashboard \
          --verbosity 0 --check-only
-   $ python manage.py test neutron_log_dashboard \
-         --settings=neutron_log_dashboard.test.settings
+   $ python manage.py test neutron_network_log_dashboard \
+         --settings=neutron_network_log_dashboard.test.settings
 
 ``tox`` uses the master constraints by default.
 

@@ -17,7 +17,7 @@ extensions = [
 
 source_suffix = '.rst'
 master_doc = 'index'
-project = u'Neutron Log Dashboard Release Notes'
+project = u'Neutron Network Log Dashboard Release Notes'
 copyright = u'2026, Chanyeol Yoon'
 release = ''
 version = ''
@@ -25,5 +25,5 @@ exclude_patterns = []
 pygments_style = 'native'
 html_theme = 'alabaster'
 html_static_path = []
-htmlhelp_basename = 'neutronlogdashboardReleaseNotesdoc'
+htmlhelp_basename = 'neutronnetworklogdashboardReleaseNotesdoc'
 locale_dirs = ['locale/']

@@ -1,6 +1,6 @@
-====================================
-Neutron Log Dashboard Release Notes
-====================================
+===========================================
+Neutron Network Log Dashboard Release Notes
+===========================================
 
 .. toctree::
    :maxdepth: 1

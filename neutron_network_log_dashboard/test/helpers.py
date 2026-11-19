@@ -10,15 +10,20 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-# The slug of the panel to be added to HORIZON_CONFIG. Required.
-PANEL = 'flow_logs'
-# The slug of the dashboard the PANEL associated with. Required.
-PANEL_DASHBOARD = 'project'
-# The slug of the panel group the PANEL is associated with.
-PANEL_GROUP = 'network'
+from openstack_dashboard.test import helpers
 
-# Python panel class of the PANEL to be added.
-ADD_PANEL = ('neutron_log_dashboard.dashboards.project.flow_logs.panel.'
-             'FlowLogs')
+from neutron_network_log_dashboard.test.test_data import utils
 
-ADD_INSTALLED_APPS = ['neutron_log_dashboard']
+
+class TestDataLoaderMixin(object):
+    def _setup_test_data(self):
+        super()._setup_test_data()
+        utils.load_data(self)
+
+
+class TestCase(TestDataLoaderMixin, helpers.TestCase):
+    pass
+
+
+class APITestCase(TestDataLoaderMixin, helpers.APITestCase):
+    pass

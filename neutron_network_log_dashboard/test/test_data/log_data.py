@@ -12,11 +12,11 @@
 
 from openstack_dashboard.test.test_data import utils
 
-from neutron_log_dashboard.api import network_log
+from neutron_network_log_dashboard.api import network_log
 
 
 def data(TEST):
-    # Wrapped objects as returned by neutron_log_dashboard.api.network_log.
+    # Wrapped objects as returned by the api.network_log module.
     TEST.flow_logs = utils.TestDataContainer()
     # Raw dicts as returned by neutronclient.
     TEST.api_flow_logs = utils.TestDataContainer()

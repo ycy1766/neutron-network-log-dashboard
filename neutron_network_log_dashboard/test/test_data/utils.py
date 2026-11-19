@@ -10,13 +10,17 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-from django.urls import re_path
+from openstack_dashboard.test.test_data import utils
 
-from neutron_log_dashboard.dashboards.project.flow_logs import views
 
-urlpatterns = [
-    re_path(r'^$', views.IndexView.as_view(), name='index'),
-    re_path(r'^create/$', views.CreateView.as_view(), name='create'),
-    re_path(r'^(?P<flow_log_id>[^/]+)/$',
-            views.DetailView.as_view(), name='detail'),
-]
+def load_data(load_onto=None):
+    from neutron_network_log_dashboard.test.test_data import log_data
+
+    loaders = (
+        log_data.data,
+    )
+    if load_onto:
+        for data_func in loaders:
+            data_func(load_onto)
+        return load_onto
+    return utils.TestData(*loaders)

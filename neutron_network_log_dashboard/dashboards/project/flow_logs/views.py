@@ -22,10 +22,10 @@ from horizon import tabs as horizon_tabs
 from horizon.utils import memoized
 from openstack_dashboard import policy
 
-from neutron_log_dashboard.api import network_log
-from neutron_log_dashboard.dashboards.project.flow_logs import forms
-from neutron_log_dashboard.dashboards.project.flow_logs import tables
-from neutron_log_dashboard.dashboards.project.flow_logs import tabs
+from neutron_network_log_dashboard.api import network_log
+from neutron_network_log_dashboard.dashboards.project.flow_logs import forms
+from neutron_network_log_dashboard.dashboards.project.flow_logs import tables
+from neutron_network_log_dashboard.dashboards.project.flow_logs import tabs
 
 
 class IndexView(horizon_tables.DataTableView):

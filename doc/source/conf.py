@@ -13,7 +13,7 @@
 import os
 import sys
 
-PROJECT = 'neutron-log-dashboard'
+PROJECT = 'neutron-network-log-dashboard'
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(BASE_DIR, "..", ".."))
@@ -32,22 +32,22 @@ extensions = [
 templates_path = ['_templates']
 source_suffix = '.rst'
 master_doc = 'index'
-project = u'Neutron Log Dashboard'
+project = u'Neutron Network Log Dashboard'
 copyright = u'2026, Chanyeol Yoon'
 
 exclude_patterns = ['**/#*', '**~', '**/#*#']
 show_authors = False
 pygments_style = 'native'
-modindex_common_prefix = ['neutron_log_dashboard.']
+modindex_common_prefix = ['neutron_network_log_dashboard.']
 primary_domain = 'py'
 nitpicky = False
 
 html_theme = 'alabaster'
 html_static_path = []
-htmlhelp_basename = 'neutronlogdashboarddoc'
+htmlhelp_basename = 'neutronnetworklogdashboarddoc'
 
 latex_documents = [
-    ('index', 'doc-neutron-log-dashboard.tex',
-     u'Neutron Log Dashboard Documentation',
+    ('index', 'doc-neutron-network-log-dashboard.tex',
+     u'Neutron Network Log Dashboard Documentation',
      u'Neutron Contributors', 'howto'),
 ]

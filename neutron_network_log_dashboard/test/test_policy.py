@@ -14,10 +14,10 @@
 
 The Horizon test settings disable the policy check (``POLICY_CHECK_FUNCTION
 = None``), so the view tests run without it. These tests turn it on and
-load the example rules of ``neutron_log_dashboard/conf/neutron_policy.d``.
-The Neutron API is mocked: what is proved is what Horizon shows and that a
-refused request never reaches a changing API call. The server policy is
-not exercised.
+load the example rules of
+``neutron_network_log_dashboard/conf/neutron_policy.d``. The Neutron API is
+mocked: what is proved is what Horizon shows and that a refused request
+never reaches a changing API call. The server policy is not exercised.
 """
 
 import os
@@ -30,16 +30,17 @@ from openstack_auth import policy as policy_backend
 from openstack_dashboard import policy
 from openstack_dashboard.test import helpers
 
-import neutron_log_dashboard
-from neutron_log_dashboard.api import network_log
-from neutron_log_dashboard.dashboards.project.flow_logs import panel
-from neutron_log_dashboard.test import helpers as test
+import neutron_network_log_dashboard
+from neutron_network_log_dashboard.api import network_log
+from neutron_network_log_dashboard.dashboards.project.flow_logs import panel
+from neutron_network_log_dashboard.test import helpers as test
 
 INDEX_URL = reverse('horizon:project:flow_logs:index')
 CREATE_URL = reverse('horizon:project:flow_logs:create')
 
-POLICY_DIR = os.path.join(os.path.dirname(neutron_log_dashboard.__file__),
-                          'conf', 'neutron_policy.d')
+POLICY_DIR = os.path.join(
+    os.path.dirname(neutron_network_log_dashboard.__file__),
+    'conf', 'neutron_policy.d')
 POLICY_FILES = {'identity': 'keystone_policy.yaml',
                 'compute': 'nova_policy.yaml',
                 'network': 'neutron_policy.yaml'}

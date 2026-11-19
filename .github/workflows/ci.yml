@@ -44,9 +44,9 @@ jobs:
       - name: flake8
         run: flake8 .
       - name: Translation catalog check
-        run: python manage.py extract_messages --module neutron_log_dashboard --verbosity 0 --check-only
+        run: python manage.py extract_messages --module neutron_network_log_dashboard --verbosity 0 --check-only
       - name: Unit tests
-        run: python manage.py test neutron_log_dashboard --settings=neutron_log_dashboard.test.settings
+        run: python manage.py test neutron_network_log_dashboard --settings=neutron_network_log_dashboard.test.settings
       - name: Package contents
         run: |
           pip wheel --no-build-isolation --no-deps -w /tmp/wheel .

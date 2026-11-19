@@ -1,0 +1,10 @@
+{% extends "horizon/common/_modal_form.html" %}
+{% load i18n %}
+
+{% block modal-body-right %}
+  <h3>{% trans "Description:" %}</h3>
+  <p>{% trans "Sample the traffic that one security group accepts or drops and export it as flow records." %}</p>
+  <p>{% trans "The security group and the event can not be changed later: delete the flow log and create a new one instead." %}</p>
+  <p>{% trans "Do not keep a packet log enabled on the same security group. The server does not reject it, but the two are not supported together." %}</p>
+  <p>{% trans "A successful creation means the flow log was recorded. It does not confirm that flow records are being collected." %}</p>
+{% endblock %}

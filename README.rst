@@ -35,7 +35,9 @@ Status
 * Neutron calls: done for both client paths, python-neutronclient and
   openstacksdk (which has no network log resource, so the requests go
   through its session). Both paths pass the same tests.
-* Panel, policy tests, documentation: not implemented.
+* Panel (Project > Network > Flow Logs): list, create, detail, enable,
+  disable, delete.
+* Policy tests with the real policy engine, documentation, CI: not done.
 
 Testing
 -------

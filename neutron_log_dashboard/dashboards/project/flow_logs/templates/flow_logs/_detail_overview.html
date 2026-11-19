@@ -1,0 +1,46 @@
+{% load i18n %}
+
+<div class="detail">
+  <dl class="dl-horizontal">
+    <dt>{% trans "Name" %}</dt>
+    <dd>{{ flow_log.name|default:_("-") }}</dd>
+
+    <dt>{% trans "ID" %}</dt>
+    <dd>{{ flow_log.id }}</dd>
+
+    <dt>{% trans "Description" %}</dt>
+    <dd>{{ flow_log.description|default:_("-") }}</dd>
+
+    <dt>{% trans "Project ID" %}</dt>
+    <dd>{{ flow_log.project_id }}</dd>
+
+    <dt>{% trans "Security Group" %}</dt>
+    {% url 'horizon:project:security_groups:detail' flow_log.resource_id as sg_url %}
+    <dd><a href="{{ sg_url }}">{{ flow_log.security_group_display|default:flow_log.resource_id }}</a></dd>
+
+    <dt>{% trans "Event" %}</dt>
+    <dd>{{ flow_log.event_display }}</dd>
+
+    <dt>{% trans "Output Type" %}</dt>
+    <dd>{{ flow_log.output }}</dd>
+
+    <dt>{% trans "Enabled" %}</dt>
+    <dd>{{ flow_log.enabled|yesno|capfirst }}</dd>
+  </dl>
+
+  <p>{% trans "Whether flow records are being collected is not shown here." %}</p>
+
+  <h4>{% trans "Enabled packet logs on the same security group" %}</h4>
+  {% if not overlaps_checked %}
+    <p>{% trans "The packet logs could not be read." %}</p>
+  {% elif overlaps %}
+    <ul>
+      {% for log in overlaps %}
+        <li>{{ log.name_or_id }}: {{ log.overlap_display }}</li>
+      {% endfor %}
+    </ul>
+    <p>{% trans "A packet log and a flow log enabled on one security group are not supported together. The server does not reject it." %}</p>
+  {% else %}
+    <p>{% trans "None found among the packet logs of this project that can be read. Packet logs of other projects are not checked." %}</p>
+  {% endif %}
+</div>

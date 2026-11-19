@@ -30,3 +30,9 @@ settings.update_dashboards(
 )
 
 INSTALLED_APPS = list(set(INSTALLED_APPS))
+
+TEST_GLOBAL_MOCKS_ON_PANELS['flow_logs'] = {
+    'method': ('neutron_log_dashboard.dashboards.project.flow_logs.panel.'
+               'FlowLogs.can_access'),
+    'return_value': True,
+}

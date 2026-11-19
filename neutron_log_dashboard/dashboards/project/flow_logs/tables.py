@@ -92,6 +92,8 @@ class DeleteFlowLog(_FlowLogAction, tables.DeleteAction):
 class EnableFlowLog(_FlowLogAction, tables.BatchAction):
     name = "enable"
     policy_rules = ENABLE_RULES
+    # The default of BatchAction says the action can not be undone.
+    help_text = _("Enable this flow log.")
 
     @staticmethod
     def action_present(count):
@@ -114,6 +116,7 @@ class EnableFlowLog(_FlowLogAction, tables.BatchAction):
 class DisableFlowLog(_FlowLogAction, tables.BatchAction):
     name = "disable"
     policy_rules = (("network", "update_log"),)
+    help_text = _("Disable this flow log.")
 
     @staticmethod
     def action_present(count):
